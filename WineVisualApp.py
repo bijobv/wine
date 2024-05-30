@@ -17,13 +17,28 @@ st.set_page_config(layout="wide")
 st.markdown("""
     <style>
     /* Apply Arial font to the entire app */
-    body, .css-1d391kg, .css-1d391kg h1, .css-1d391kg h2, .css-1d391kg h3, .css-1d391kg h4, .css-1d391kg h5, .css-1d391kg h6, .css-1d391kg p, .css-1d391kg li, .css-1d391kg span, .css-1d391kg div {
+    body, div, h1, h2, h3, h4, h5, h6, p, li, span, input, select, textarea {
         font-family: 'Arial', sans-serif;
     }
     /* Apply light theme */
     body {
         background-color: #ffffff;
         color: #000000;
+    }
+            
+    /* Center the table */
+    .center-table {
+        width: 80%; /* Set the width to 80% */
+        margin: 0 auto; /* Center the table container */
+    }
+    /* Ensure table inside the container takes full width */
+    .center-table table {
+        width: 100%; /* Table should take full width of its container */
+    }
+            
+    .stButton>button {
+        margin: 0 auto; /* Center the button */
+        display: block; /* Ensure the button is a block element */
     }
     </style>
     """, unsafe_allow_html=True)
@@ -44,7 +59,7 @@ data2['wine'] = 'White'
 df = pd.concat([data1, data2], ignore_index=True)
 
 
-### Reroder columns
+#### Reroder columns
 dersired_order = ['alcohol', 'citric acid', 'fixed acidity', 'volatile acidity', 'pH', 'residual sugar', 'total sulfur dioxide', 'free sulfur dioxide', 'sulphates', 'chlorides', 'density', 'quality', 'wine type', 'wine']
 
 data1 = data1[dersired_order]
@@ -105,12 +120,12 @@ df = df.drop(['wine type'], axis=1)
 # Define a custom color map for quality
 color_map = {
     3: '#0E078B',  
-    4: '#5D02A5',
+    4: '#6C00DA',
     5: '#8F2698',
     6: '#BE5377',  
     7: '#DE805B',
     8: '#F1B84E',
-    9: '#FCE22F'    
+    9: '#FF0000'    
 }
 
 # Melt the DataFrame to long format
@@ -220,12 +235,14 @@ filtered_df = df[df['wine'] == Wine_filter]
 
 # Red Wine
 df1 = data1.drop(['wine type'], axis = 1)
+color_sequence = [color_map[quality] for quality in sorted(df['quality'].unique())]
+
 fig1 = px.parallel_coordinates(df1, color="quality", labels={
         'fixed acidity': 'Fixed Acidity', 'volatile acidity': 'Volatile Acidity', 'citric acid': 'Citric Acid',
         'residual sugar': 'Residual Sugar', 'chlorides': 'Chlorides', 'free sulfur dioxide': 'Free Sulfur Dioxide',
         'total sulfur dioxide': 'Total Sulfur Dioxide', 'density': 'Density', 'pH': 'pH', 'sulphates': 'Sulphates',
         'alcohol': 'Alcohol', 'quality': 'Quality'},
-        color_continuous_scale=px.colors.sequential.Plasma, template = 'plotly_white', height = 700)
+        color_continuous_scale=color_sequence, template = 'plotly_white', height = 700)
 
 fig1.update_traces(unselected=dict(line=dict(color='white')))
 
@@ -235,8 +252,6 @@ fig1.update_layout(
         size=14,
         color="black"
     ),
-    #paper_bgcolor='rgb(30, 30, 30)',
-    #plot_bgcolor='rgb(30, 30, 30)',
     margin=dict(l=100)
 )
 
@@ -260,7 +275,7 @@ for idx, label in enumerate(labels):
         yref='paper',
         text=label,
         showarrow=False,
-        font=dict(size=12),
+        font=dict(size=12, color="black"),
         xanchor='center'  # Center align the text
     ))
 
@@ -274,7 +289,7 @@ fig2 = px.parallel_coordinates(df2, color="quality", labels={
         'residual sugar': 'Residual Sugar', 'chlorides': 'Chlorides', 'free sulfur dioxide': 'Free Sulfur Dioxide',
         'total sulfur dioxide': 'Total Sulfur Dioxide', 'density': 'Density', 'pH': 'pH', 'sulphates': 'Sulphates',
         'alcohol': 'Alcohol', 'quality': 'Quality'},
-        color_continuous_scale=px.colors.sequential.Plasma, template = 'plotly_dark', height = 700)
+        color_continuous_scale=color_sequence, template = 'plotly_dark', height = 700)
 
 fig2.update_traces(unselected=dict(line=dict(color='white')))
 
@@ -284,8 +299,6 @@ fig2.update_layout(
         size=14,
         color="black"
     ),
-    #paper_bgcolor='rgb(30, 30, 30)',
-    #plot_bgcolor='rgb(30, 30, 30)',
     margin=dict(l=100)
 )
 
@@ -310,11 +323,12 @@ for idx, label in enumerate(labels):
         yref='paper',
         text=label,
         showarrow=False,
-        font=dict(size=12),
+        font=dict(size=12, color="black"),
         xanchor='center'  # Center align the text
     ))
 
 fig2.update_layout(annotations=annotations)
+fig2.update_layout(showlegend=False)
 
 
 df1 = df1.drop(['wine', 'quality'], axis = 1)
@@ -331,13 +345,13 @@ df1.columns = df1.columns.map(title_case_except_ph)
 df2.columns = df2.columns.map(title_case_except_ph)
 
 
-
 if Wine_filter == 'Red':
     st.plotly_chart(fig1)
-    
+
     def display_random_rows():
         random_rows = df1.sample(1)
-        st.dataframe(random_rows, use_container_width=True)
+        html_table = random_rows.to_html(index=False)
+        st.markdown(f'<div class="center-table">{html_table}</div>', unsafe_allow_html=True)
 
     if st.button('Generate Random Wine Data'):
         display_random_rows()
@@ -347,7 +361,8 @@ elif Wine_filter == 'White':
     
     def display_random_rows():
         random_rows = df2.sample(1)
-        st.dataframe(random_rows, use_container_width=True)
+        html_table = random_rows.to_html(index=False)
+        st.markdown(f'<div class="center-table">{html_table}</div>', unsafe_allow_html=True)
         
     if st.button('Generate Random Wine Data'):
         display_random_rows()
