@@ -11,20 +11,23 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
 # Page layout
-st.set_page_config(layout="wide")
 
-# Apply the light theme
-st.markdown(
-    """
+st.markdown("""
     <style>
+    /* Apply Arial font to the entire app */
+    body, .css-1d391kg, .css-1d391kg h1, .css-1d391kg h2, .css-1d391kg h3, .css-1d391kg h4, .css-1d391kg h5, .css-1d391kg h6, .css-1d391kg p, .css-1d391kg li, .css-1d391kg span, .css-1d391kg div {
+        font-family: 'Arial', sans-serif;
+    }
+    /* Apply light theme */
     body {
         background-color: #ffffff;
         color: #000000;
     }
     </style>
-    """,
-    unsafe_allow_html=True
-)
+    """, unsafe_allow_html=True)
+
+st.set_page_config(layout="wide")
+
 
 # Title of the app
 st.title('Wine Analysis')
@@ -40,6 +43,13 @@ data2['wine'] = 'White'
 
 df = pd.concat([data1, data2], ignore_index=True)
 
+
+### Reroder columns
+dersired_order = ['alcohol', 'citric acid', 'fixed acidity', 'volatile acidity', 'pH', 'residual sugar', 'total sulfur dioxide', 'free sulfur dioxide', 'sulphates', 'chlorides', 'density', 'quality', 'wine type', 'wine']
+
+data1 = data1[dersired_order]
+data2 = data2[dersired_order]
+df = df[dersired_order]
 
 
 ###########################
@@ -235,6 +245,27 @@ for dim in fig1.data[0]['dimensions']:
         dim['tickvals'] = list(range(int(df1['quality'].min()), int(df1['quality'].max()) + 1))
         dim['ticktext'] = [str(x) for x in dim['tickvals']]
 
+num_axes = len(df1.columns) - 2  # Exclude the color dimension 'quality'
+positions = [(i / num_axes) for i in range(num_axes + 1)]
+
+annotations = []
+labels = ['Alcohol', 'Citric Acid', 'Fixed Acidity', 'Volatile acidity', 'pH', 'Residual Sugar', 'Total Sulfur Dioxide', 'Free Sulfur Dioxide', 'Sulphates', 'Chlorides', 'Density', 'Quality']
+
+for idx, label in enumerate(labels):
+    # Bottom annotations
+    annotations.append(dict(
+        x=positions[idx],
+        y=-0.075,
+        xref='paper',
+        yref='paper',
+        text=label,
+        showarrow=False,
+        font=dict(size=12),
+        xanchor='center'  # Center align the text
+    ))
+
+fig1.update_layout(annotations=annotations)
+
 # White Wine
 
 df2 = data2.drop(['wine type'], axis = 1)
@@ -264,6 +295,28 @@ for dim in fig2.data[0]['dimensions']:
         dim['ticktext'] = [str(x) for x in dim['tickvals']]
 
 
+num_axes = len(df2.columns) - 2  # Exclude the color dimension 'quality'
+positions = [(i / num_axes) for i in range(num_axes + 1)]
+
+annotations = []
+labels = ['Alcohol', 'Citric Acid', 'Fixed Acidity', 'Volatile acidity', 'pH', 'Residual Sugar', 'Total Sulfur Dioxide', 'Free Sulfur Dioxide', 'Sulphates', 'Chlorides', 'Density', 'Quality']
+
+for idx, label in enumerate(labels):
+    # Bottom annotations
+    annotations.append(dict(
+        x=positions[idx],
+        y=-0.075,
+        xref='paper',
+        yref='paper',
+        text=label,
+        showarrow=False,
+        font=dict(size=12),
+        xanchor='center'  # Center align the text
+    ))
+
+fig2.update_layout(annotations=annotations)
+
+
 df1 = df1.drop(['wine', 'quality'], axis = 1)
 df2 = df2.drop(['wine', 'quality'], axis = 1)
 
@@ -283,7 +336,7 @@ if Wine_filter == 'Red':
     st.plotly_chart(fig1)
     
     def display_random_rows():
-        random_rows = df1.sample(5)
+        random_rows = df1.sample(1)
         st.dataframe(random_rows, use_container_width=True)
 
     if st.button('Generate Random Wine Data'):
@@ -293,7 +346,7 @@ elif Wine_filter == 'White':
     st.plotly_chart(fig2)
     
     def display_random_rows():
-        random_rows = df2.sample(5)
+        random_rows = df2.sample(1)
         st.dataframe(random_rows, use_container_width=True)
         
     if st.button('Generate Random Wine Data'):
