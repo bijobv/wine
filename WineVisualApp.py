@@ -12,6 +12,8 @@ from plotly.subplots import make_subplots
 
 # Page layout
 
+st.set_page_config(layout="wide")
+
 st.markdown("""
     <style>
     /* Apply Arial font to the entire app */
@@ -25,8 +27,6 @@ st.markdown("""
     }
     </style>
     """, unsafe_allow_html=True)
-
-st.set_page_config(layout="wide")
 
 
 # Title of the app
