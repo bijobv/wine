@@ -354,7 +354,7 @@ if Wine_filter == 'Red':
 
     def display_random_rows():
         random_rows = df1.sample(1)
-        html_table = random_rows.to_html(index=False)
+        html_table = random_rows.to_html(index=False, classes="center-table")
         st.markdown(f'<div class="center-table">{html_table}</div>', unsafe_allow_html=True)
 
     if st.button('Generate Random Wine Data'):
@@ -365,7 +365,7 @@ elif Wine_filter == 'White':
     
     def display_random_rows():
         random_rows = df2.sample(1)
-        html_table = random_rows.to_html(index=False)
+        html_table = random_rows.to_html(index=False, classes="center-table")
         st.markdown(f'<div class="center-table">{html_table}</div>', unsafe_allow_html=True)
         
     if st.button('Generate Random Wine Data'):
