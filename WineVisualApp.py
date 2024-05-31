@@ -36,6 +36,11 @@ st.markdown("""
         width: 100%; /* Table should take full width of its container */
     }
             
+    /* Left align the values in the table */
+    .center-table table td {
+    text-align: left; /* Align text to the left */
+    }
+            
     .stButton>button {
         margin: 0 auto; /* Center the button */
         display: block; /* Ensure the button is a block element */
@@ -72,14 +77,14 @@ df = df[dersired_order]
 st.subheader('1A. Grouping of red and white wines')
 
 # Paths to the icons
-red_wine_icon_path = "red_wine.png"  # Replace with your image path
-white_wine_icon_path = "white_wine.png"  # Replace with your image path
+red_wine_icon_path = "red_wine.png"  
+white_wine_icon_path = "white_wine.png"  
 
 
 image_paths = {
-    "Red": "som_red_wine.png",  # Replace with your image path
-    "White": "som_white_wine.png",  # Replace with your image path
-    "All": "som_wine.png"  # Replace with your image path
+    "Red": "som_red_wine.png",  
+    "White": "som_white_wine.png",  
+    "All": "som_wine.png"  
 }
 
 
@@ -146,7 +151,6 @@ unit_mapping = {
     'pH': '',
     'Sulphates': 'g(potassium sulphate)/dm3',
     'Alcohol': 'vol.%3',
-    # Add more mappings as needed
 }
 
 # Create the 'Unit' column based on the 'Attribute' column
