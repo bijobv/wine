@@ -325,6 +325,9 @@ st.plotly_chart(fig)
 ########### 1C ############
 st.write("<br>" * 2, unsafe_allow_html=True)
 st.subheader('C. Predicting Quality Values')
+st.markdown("""This visualisation has been produced, displaying the quality scores and the associated attribute values of all wines in the dataset, 
+            across the 11-dimensional feature vectors. It can be used to predict a quality value given an unseen data sample across those 11 dimensions. 
+            The visualisation aims to assist the viewer to accurately predict the quality value based on the random data sample.""")
 
 df = pd.concat([data1, data2], ignore_index=True)
 
