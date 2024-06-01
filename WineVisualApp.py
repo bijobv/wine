@@ -12,7 +12,7 @@ from plotly.subplots import make_subplots
 
 # Page layout
 
-st.set_page_config(layout="wide")
+st.set_page_config(layout="wide", initial_sidebar_state="collapsed")
 
 st.markdown("""
     <style>
@@ -29,7 +29,7 @@ st.markdown("""
     /* Apply light theme */
     body {
         background-color: #ffffff;
-        color: #000000;
+        color: #ffffff;
     }
             
     .st-emotion-cache-6qob1r.eczjsme8 {
@@ -72,6 +72,12 @@ st.markdown("""
         margin: 0 auto; /* Center the button */
         display: block; /* Ensure the button is a block element */
     }
+            
+    .st-expander .st-expander-header {
+        font-weight: bold;
+        font-size: 20px;
+    }
+            
     </style>
     """, unsafe_allow_html=True)
 
@@ -98,7 +104,7 @@ names_and_paths = [
 columns = st.columns(4)
 for col, data in zip(columns, names_and_paths):
     with col:
-        colA, colB = st.columns([3, 10])
+        colA, colB = st.columns([3, 14])
         with colA:
             st.image(data["path"], width=50)
         with colB:
@@ -138,22 +144,11 @@ st.markdown("""
             - To visually reveal the association between feature vectors of the wines and their quality rankings,
             - To visually predict the quality of a wine based on a random sample of 11 physiochemical properties
             """)
-data_desc = {
-    'Features': ['Alcohol', 'Citric Acid', 'Fixed Acidity', 'Volatile acidity', 'pH', 'Residual Sugar', 'Total Sulfur Dioxide', 'Free Sulfur Dioxide', 'Sulphates', 'Chlorides', 'Density', 'Quality'],
-    'Unit': ['vol.%3', 'g/dm3', 'g(tartaric acid)/dm3', 'g(acetic acid)/dm3', 'pH', 'g/dm3', 'mg/dm3', 'mg/dm3', 'g(potassium sulphate)/dm3', 'g(sodium chloride)/dm3', 'g/cm3', 'score'],
-    'Data Type': ['Ratio', 'Ratio', 'Ratio', 'Ratio', 'Ratio', 'Ratio', 'Ratio', 'Ratio', 'Ratio', 'Ratio', 'Ratio', 'Ordinal']
-}
-
-st.write("<br>" * 1, unsafe_allow_html=True)
-
-dd = pd.DataFrame(data_desc)
-html_table = dd.to_html(index=False, classes="left-aligned")
-st.markdown(html_table, unsafe_allow_html=True)
 
 
 ###########################
 ########### 1A ############
-st.write("<br>" * 2, unsafe_allow_html=True)
+st.write("<br>" * 3, unsafe_allow_html=True)
 st.subheader('A. Grouping of red and white wines')
 st.markdown("""Our first objective was to show the distinction between red and white wine based on all the 11 physiochemical features. 
             Even though red and white wines are uniquely identified in the given dataset, we wanted to explore if the two wines are different not just in colour, but also in their physiochemical features. 
@@ -175,12 +170,22 @@ image_paths = {
 
 
 # Display the selected image
-col1, col2 = st.columns([8, 10])  # Adjust the first number to control the width ratio
+col1, col2, col3 = st.columns([1, 2, 1])  # Adjust the first number to control the width ratio
 with col1:
+    st.markdown("")
+
+with col2:
     option = st.selectbox("Select view", ("All", "Red", "White"), index=0)
     if option:
         st.image(image_paths[option], use_column_width=True)
-with col2:
+    st.write("<br>" * 1, unsafe_allow_html=True)
+
+    with st.expander("**Read more on Self-Organising Map (SOM)**"):
+        st.write("""SOM uses an unsupervised neural network algorithm adept at reducing dimensionality, while preserving all essential topological properties. 
+                Through competitive learning and neighbourhood adaptation, the SOM organises similar wines with comparable features and clusters them together. 
+                These features make a SOM useful for visualising highly dimensional data and observing underlying structures or patterns within. 
+                Although, it is important to note that there are several limitations to SOM as it provides only relative distances and qualitative analyses, and the distance or direction do not carry any meaning.""")
+with col3:
     if option:
         st.write("<br>" * 4, unsafe_allow_html=True)
         # Create a horizontal layout for "Red Wine" image and text
@@ -196,19 +201,14 @@ with col2:
             st.image(white_wine_icon_path, width=25)
         with white_wine_col2:
             st.write(" " + "White Wine")
-    st.write("<br>" * 5, unsafe_allow_html=True)
-    st.markdown("###### Self-Organising Map (SOM)")
-    st.markdown("""SOM uses an unsupervised neural network algorithm adept at reducing dimensionality, while preserving all essential topological properties. 
-                Through competitive learning and neighbourhood adaptation, the SOM organises similar wines with comparable features and clusters them together. 
-                These features make a SOM useful for visualising highly dimensional data and observing underlying structures or patterns within. 
-                Although, it is important to note that there are several limitations to SOM as it provides only relative distances and qualitative analyses, and the distance or direction do not carry any meaning.""")
+    
 
 
 
 
 ###########################
 ########### 1B ############
-st.write("<br>" * 2, unsafe_allow_html=True)
+st.write("<br>" * 3, unsafe_allow_html=True)
 st.subheader('B. Association between Features and Quality')
 st.markdown("""This visualisation uses a series of filterable box plots to display the 11 dimensional features and their correlation to wine quality. 
             Box plots effectively summarize central tendency, variability, and skew, and are robust to asymmetrical data distributions and outliers. 
@@ -323,7 +323,7 @@ st.plotly_chart(fig)
 
 ###########################
 ########### 1C ############
-st.write("<br>" * 2, unsafe_allow_html=True)
+st.write("<br>" * 3, unsafe_allow_html=True)
 st.subheader('C. Predicting Quality Values')
 st.markdown("""You can use this tool to predict the likely score of a wine given some all of its attributes. The more attributes you use the more focused the prediction will be.
             Pin a specific value, or rage of values, on one or multiple attributes to determine the probable quality score of the wine.
@@ -333,8 +333,6 @@ df = pd.concat([data1, data2], ignore_index=True)
 
 Wine_filter = st.selectbox('Select Wine', options=list(df['wine'].unique()), index=0)
 filtered_df = df[df['wine'] == Wine_filter]
-
-#st.write(desc_df)
 
 # Red Wine
 df1 = data1.drop(['wine type'], axis = 1)
@@ -470,8 +468,34 @@ elif Wine_filter == 'White':
     if st.button('Generate Random Wine Data'):
         display_random_rows()
 
+# Define the data for the table
+data = [
+    {"Feature": "To Pin", "Unit": "Use the mouse to click on a value, or drag over a range of values, on any given attribute scale as you some lines in the visualisation will remain coloured, these are the ones that intersect with the attribute at the point / range that you selected.", "Data Type": "Type 1", "Image": "to_pin.png"},
+    {"Feature": "To Unpin", "Unit": "Double click on the pin in a given attribute scale to remove it from the scale.", "Data Type": "Type 2", "Image": "to_unpin.png"},
+    {"Feature": "Generate Random Sample", "Unit": "You can click on the button to generate random sample data into a table below the visualisation, or you can use your own data to use on this prediction tool.", "Data Type": "Type 3", "Image": None}
+]
+
+st.write("<br>" * 1, unsafe_allow_html=True)
+
+# Create a collapsible section
+with st.expander("###### Instructions", expanded=True):
+    # Create a 3-column table within the collapsible section
+    for index, item in enumerate(data):
+        col1, col2, col3 = st.columns([2, 6, 3])
+        with col1:
+            st.write(item["Feature"])
+        with col2:
+            st.write(item["Unit"])
+        with col3:
+            if item["Image"]:
+                st.image(item["Image"], width=200) 
+            else:
+                st.write("")
+        if index < len(data) - 1:
+            st.markdown('<hr style="border:0.5px solid lightgrey;"/>', unsafe_allow_html=True)
+
 
 ##########################
 ###### Conclusion ######
-st.write("<br>" * 2, unsafe_allow_html=True)
+st.write("<br>" * 3, unsafe_allow_html=True)
 st.subheader('Conclusion')
