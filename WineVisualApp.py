@@ -16,6 +16,12 @@ st.set_page_config(layout="wide")
 
 st.markdown("""
     <style>
+    /* Apply Arial font to all tables */
+    table {
+        font-family: 'Arial', sans-serif;
+        font-size: 14px;
+    }
+            
     /* Apply Arial font to the entire app */
     body, div, h1, h2, h3, h4, h5, h6, p, li, span, input, select, textarea {
         font-family: 'Arial', sans-serif;
@@ -24,6 +30,19 @@ st.markdown("""
     body {
         background-color: #ffffff;
         color: #000000;
+    }
+            
+    .st-emotion-cache-6qob1r.eczjsme8 {
+        width: 350px;
+    }
+            
+    .custom-link {
+        color: #000000 !important; /* Change link color */
+        text-decoration: none; /* Remove underline */
+    }
+    .custom-link:hover {
+        color: #CD4A77 !important; /* Change color on hover */
+        text-decoration: underline; /* Underline on hover */
     }
             
     /* Center the table */
@@ -38,8 +57,16 @@ st.markdown("""
             
     /* Left align the values in the table */
     .center-table table td {
-    text-align: left; /* Align text to the left */
+    text-align: right; /* Align text to the left */
     }
+    
+    .left-aligned td, .left-aligned th {
+    text-align: left;
+    }   
+    
+    .left-aligned tbody tr:nth-child(odd) {
+        background-color: #f2f2f2; /* Set background color for odd rows */
+    } 
             
     .stButton>button {
         margin: 0 auto; /* Center the button */
@@ -48,9 +75,37 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
+# Sidebar
+st.sidebar.header("Contents")
+st.sidebar.markdown("""<a href="#introduction" class="custom-link">Introduction</a>""", unsafe_allow_html=True)
+st.sidebar.markdown("""<a href="#a-grouping-of-red-and-white-wines" class="custom-link">Grouping of red and white wines</a>""", unsafe_allow_html=True)
+st.sidebar.markdown("""<a href="#b-association-between-features-and-quality" class="custom-link">Association between features and quality</a>""", unsafe_allow_html=True)
+st.sidebar.markdown("""<a href="#c-predicting-quality-values" class="custom-link">Predicting quality values</a>""", unsafe_allow_html=True)
+st.sidebar.markdown("""<a href="#conclusion" class="custom-link">Conclusion</a>""", unsafe_allow_html=True)
+
+
 
 # Title of the app
 st.title('Wine Analysis')
+
+names_and_paths = [
+    {"name": "Lisa D'Cruz", "path": "lisa.png"},
+    {"name": "Bijo Varghese", "path": "bijo.png"},
+    {"name": "Emma Marsden", "path": "red_wine.png"},
+    {"name": "David D'Silva", "path": "david.png"}
+]
+
+columns = st.columns(4)
+for col, data in zip(columns, names_and_paths):
+    with col:
+        colA, colB = st.columns([3, 10])
+        with colA:
+            st.image(data["path"], width=50)
+        with colB:
+            st.write("<div style='margin-top: -25px'></div>", unsafe_allow_html=True)
+            st.write(data["name"])
+
+
 
 # Load the dataset
 data1 = pd.read_csv('winequality-red.csv', delimiter=';')
@@ -72,9 +127,39 @@ data2 = data2[dersired_order]
 df = df[dersired_order]
 
 
+##########################
+###### Introduction ######
+st.write("<br>" * 3, unsafe_allow_html=True)
+st.subheader('Introduction')
+
+st.markdown("""The purpose of this report is to present three interactive visualisations created by Group 2 and to demonstrate how the visualisations achieve the following goals:""")
+st.markdown("""
+            - To visually depict the grouping of red and white wines based on all 11  physiochemical properties,
+            - To visually reveal the association between feature vectors of the wines and their quality rankings,
+            - To visually predict the quality of a wine based on a random sample of 11 physiochemical properties
+            """)
+data_desc = {
+    'Features': ['Alcohol', 'Citric Acid', 'Fixed Acidity', 'Volatile acidity', 'pH', 'Residual Sugar', 'Total Sulfur Dioxide', 'Free Sulfur Dioxide', 'Sulphates', 'Chlorides', 'Density', 'Quality'],
+    'Unit': ['vol.%3', 'g/dm3', 'g(tartaric acid)/dm3', 'g(acetic acid)/dm3', 'pH', 'g/dm3', 'mg/dm3', 'mg/dm3', 'g(potassium sulphate)/dm3', 'g(sodium chloride)/dm3', 'g/cm3', 'score'],
+    'Data Type': ['Ratio', 'Ratio', 'Ratio', 'Ratio', 'Ratio', 'Ratio', 'Ratio', 'Ratio', 'Ratio', 'Ratio', 'Ratio', 'Ordinal']
+}
+
+st.write("<br>" * 1, unsafe_allow_html=True)
+
+dd = pd.DataFrame(data_desc)
+html_table = dd.to_html(index=False, classes="left-aligned")
+st.markdown(html_table, unsafe_allow_html=True)
+
+
 ###########################
 ########### 1A ############
-st.subheader('1A. Grouping of red and white wines')
+st.write("<br>" * 2, unsafe_allow_html=True)
+st.subheader('A. Grouping of red and white wines')
+st.markdown("""Our first objective was to show the distinction between red and white wine based on all the 11 physiochemical features. 
+            Even though red and white wines are uniquely identified in the given dataset, we wanted to explore if the two wines are different not just in colour, but also in their physiochemical features. 
+            We have used a SOM visual to qualitatively distinguish red and white wine using all 11 dimensions. Through the interaction we can observe that a subset of red and white wines are indistinguishable based on their 11 physiochemical features, 
+            but the majority of red wine vectors are clustered in the bottom left corner of the map. Conversely, we see that the white wine samples are distributed across the remaining map area.""")
+st.write("<br>" * 1, unsafe_allow_html=True)
 
 # Paths to the icons
 red_wine_icon_path = "red_wine.png"  
@@ -99,18 +184,24 @@ with col2:
     if option:
         st.write("<br>" * 4, unsafe_allow_html=True)
         # Create a horizontal layout for "Red Wine" image and text
-        red_wine_col1, red_wine_col2 = st.columns([0.5, 20])
+        red_wine_col1, red_wine_col2 = st.columns([1, 20])
         with red_wine_col1:
             st.image(red_wine_icon_path, width=25)
         with red_wine_col2:
-            st.write("Red Wine")
+            st.write(" " + "Red Wine")
 
         # Create a horizontal layout for "White Wine" image and text
-        white_wine_col1, white_wine_col2 = st.columns([0.5, 20])
+        white_wine_col1, white_wine_col2 = st.columns([1, 20])
         with white_wine_col1:
             st.image(white_wine_icon_path, width=25)
         with white_wine_col2:
-            st.write("White Wine")
+            st.write(" " + "White Wine")
+    st.write("<br>" * 5, unsafe_allow_html=True)
+    st.markdown("###### Self-Organising Map (SOM)")
+    st.markdown("""SOM uses an unsupervised neural network algorithm adept at reducing dimensionality, while preserving all essential topological properties. 
+                Through competitive learning and neighbourhood adaptation, the SOM organises similar wines with comparable features and clusters them together. 
+                These features make a SOM useful for visualising highly dimensional data and observing underlying structures or patterns within. 
+                Although, it is important to note that there are several limitations to SOM as it provides only relative distances and qualitative analyses, and the distance or direction do not carry any meaning.""")
 
 
 
@@ -118,7 +209,12 @@ with col2:
 ###########################
 ########### 1B ############
 st.write("<br>" * 2, unsafe_allow_html=True)
-st.subheader('1B. Association between Features and Quality')
+st.subheader('B. Association between Features and Quality')
+st.markdown("""This visualisation uses a series of filterable box plots to display the 11 dimensional features and their correlation to wine quality. 
+            Box plots effectively summarize central tendency, variability, and skew, and are robust to asymmetrical data distributions and outliers. 
+            This allows for visual correlation of feature values with quality levels, comparative analysis, and identification of patterns and trends. 
+            The viewer is able to interact with the dataset by adding/removing features with the filter, or through pan/zoom within subplots.""")
+st.write("<br>" * 1, unsafe_allow_html=True)
 
 df = df.drop(['wine type'], axis=1)
 
@@ -228,7 +324,7 @@ st.plotly_chart(fig)
 ###########################
 ########### 1C ############
 st.write("<br>" * 2, unsafe_allow_html=True)
-st.subheader('1C. Predicting Quality Values')
+st.subheader('C. Predicting Quality Values')
 
 df = pd.concat([data1, data2], ignore_index=True)
 
@@ -371,3 +467,8 @@ elif Wine_filter == 'White':
     if st.button('Generate Random Wine Data'):
         display_random_rows()
 
+
+##########################
+###### Conclusion ######
+st.write("<br>" * 2, unsafe_allow_html=True)
+st.subheader('Conclusion')
