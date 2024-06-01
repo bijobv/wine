@@ -138,13 +138,24 @@ df = df[dersired_order]
 st.write("<br>" * 3, unsafe_allow_html=True)
 st.subheader('Introduction')
 
-st.markdown("""The purpose of this report is to present three interactive visualisations created by Group 2 and to demonstrate how the visualisations achieve the following goals:""")
+st.markdown("""Harnessing the power of visual analytics for making data-driven decisions has the potential to be a game-changer for the billion-dollar global wine industry. 
+            The issue for the industry lies in the traditional reliance on subjective preferences to assess the quality of wine and the challenge of understanding large quantities 
+            of data related to the properties of a product that is as complex as wine. There is a clear need for interactive tools that assist wine producers in assessing wine quality 
+            and its physiochemical features consistently, quickly and in a user-friendly way.""")
+
 st.markdown("""
-            - To visually depict the grouping of red and white wines based on all 11  physiochemical properties,
-            - To visually reveal the association between feature vectors of the wines and their quality rankings,
-            - To visually predict the quality of a wine based on a random sample of 11 physiochemical properties
+            The three interactive visualisation tools below proceed with a step-by-step approach to 
+            understanding the red and white wine variants of the Vinho Verde wine from Portugal. The first interactive visualisation displays the underlying structure of the two types of wine. 
+            The second shows the relationship between the wines features and the quality rating. The third is a predictive tool for wine quality based on how the wine’s features are used in 
+            differing combinations.
             """)
 
+st.markdown("""
+            The features that are analysed in these visualisations are: 1. fixed acidity 2. volatile acidity 3. citric acid 4. residual sugar 5. chlorides 
+            6. free sulphur dioxide 7. total sulphur dioxide 8. density 9. pH 10. sulphates and 11. alcohol. 
+            The visualisations have been developed using data from the archive of the UC Irvine Machine Learning Repository, which can be found at https://archive.ics.uci.edu/dataset/186/wine+quality and contains the records for 4898 white wines and 1599 red wines. 
+            A quality score on a scale of 0 to 10 is assigned to each record.
+            """)
 
 ###########################
 ########### 1A ############
