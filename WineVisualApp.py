@@ -337,7 +337,7 @@ st.plotly_chart(fig)
 st.write("<br>" * 3, unsafe_allow_html=True)
 st.subheader('C. Predicting Quality Values')
 st.markdown("""You can use this tool to predict the likely score of a wine given some all of its attributes. The more attributes you use the more focused the prediction will be.
-            Pin a specific value, or rage of values, on one or multiple attributes to determine the probable quality score of the wine.
+            Pin a specific value, or range of values, on one or multiple attributes to determine the probable quality score of the wine.
             Note that with some attributes fixed, you can change the pins on other attributes to see the outcome on the probable wine score.""")
 
 df = pd.concat([data1, data2], ignore_index=True)
@@ -510,3 +510,9 @@ with st.expander("###### Instructions", expanded=True):
 ###### Conclusion ######
 st.write("<br>" * 3, unsafe_allow_html=True)
 st.subheader('Conclusion')
+st.markdown("""These interactive visualisations provide wine producers with an interface that mediates their access to thousands of wine data points so that through the 
+            power of human visual capabilities they can observe and detect patterns and trends that would have been hard if not impossible to discern in a spreadsheet. 
+            We believe the three visualisation tools could form the basis for future development into a real-world application that employs a consistent approach to assessing 
+            wine types and their quality. When used in combination with each other, the three interactive visualisations offer practical insights for wine producers to 
+            improve their production process through data-driven decision making and enhance the appeal of their products by tailoring wines to consumer preferences.
+            """)
