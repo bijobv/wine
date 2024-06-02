@@ -481,7 +481,7 @@ elif Wine_filter == 'White':
 
 # Define the data for the table
 data = [
-    {"Feature": "To Pin", "Unit": "Use the mouse to click on a value, or drag over a range of values, on any given attribute scale as you some lines in the visualisation will remain coloured, these are the ones that intersect with the attribute at the point / range that you selected.", "Data Type": "Type 1", "Image": "to_pin.png"},
+    {"Feature": "To Pin", "Unit": "Use the mouse to click on a value, or drag over a range of values, on any given attribute scale and as you do, some lines in the visualisation will remain coloured, these are the ones that intersect with the attribute at the point / range that you selected.", "Data Type": "Type 1", "Image": "to_pin.png"},
     {"Feature": "To Unpin", "Unit": "Double click on the pin in a given attribute scale to remove it from the scale.", "Data Type": "Type 2", "Image": "to_unpin.png"},
     {"Feature": "Generate Random Sample", "Unit": "You can click on the button to generate random sample data into a table below the visualisation, or you can use your own data to use on this prediction tool.", "Data Type": "Type 3", "Image": None}
 ]
