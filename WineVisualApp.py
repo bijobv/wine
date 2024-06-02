@@ -92,7 +92,7 @@ st.sidebar.markdown("""<a href="#conclusion" class="custom-link">Conclusion</a>"
 
 
 # Title of the app
-st.title('Wine Analysis')
+st.title('Interactive Visualisations for Wine Analysis')
 
 names_and_paths = [
     {"name": "Lisa D'Cruz", "path": "lisa.png"},
